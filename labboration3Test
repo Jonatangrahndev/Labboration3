@@ -1,0 +1,87 @@
+import io.cucumber.java.BeforeAll;
+import io.cucumber.java.en.*;
+import org.junit.After;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static sun.security.util.KnownOIDs.EC;
+
+public class Labb3Test {
+    private static WebDriver driver;
+    @BeforeAll
+    static void setup() {
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("incognito");
+        driver = new ChromeDriver(options);
+    }
+
+    @Given("I am on Svtplay website")
+
+    public void IAmOnTheSvtplayWebsite() {
+        // väg till webdrivers
+        System.setProperty("webdriver.chrome.driver", "C:\\Webdriver\\bin\\chromedriver.exe");
+
+        // ny instans & navigering
+        driver.get("https://www.svtplay.se");
+    }
+
+    @Then("The website title should be {SVT Play logotyp}")
+    public void theWebsiteTitleShouldBe() {
+        //verifiering av Titel
+        assertEquals(driver.getTitle(),"SVT Play logotyp");
+    }
+    @Then("The  ")
+    public void IVerifySubCategories() {
+        //Verifiering av Start,program & kanaler.
+        WebElement startMenu = driver.findElement(By.cssSelector("a[href='/start']"));
+        WebElement programMenu = driver.findElement(By.cssSelector("a[href='/program']"));
+        WebElement kanalerMenu = driver.findElement(By.cssSelector("a[href='/kanaler']"));
+        assert startMenu.getText().equals("Start");
+        assert programMenu.getText().equals("Program");
+        assert kanalerMenu.getText().equals("Kanaler");
+    }
+    @Then("Logotype should be visible")
+    public void theLogotypeShouldBeVisible() {
+        //Verifiering av att logotyp är synlig
+        WebElement logotype = driver.findElement(By.cssSelector("sc-31022b15-0 bNFQDk"));
+        assertTrue(logotype.isDisplayed());
+    }
+
+    @When("I click the Availability {}")
+    //Klicka på tillgänglighetsknappen
+    public void iClickAvailability(String availability) {
+        WebElement textElement = driver.findElement(By.xpath("<a href=https://kontakt.svt.se/guide/tillganglighet" + availability + "']"));
+        textElement.click();
+    }
+    @Then("The text should be {string}")
+    public void theTextShouldBe() {
+        //verifiering av text
+        String actualText = driver.findElement(By.tagName("Så arbetar SVT med tillgänglighet")).getText();
+        assertEquals(actualText,"Så arbetar SVT med tillgänglighet" );
+    }
+
+    @When("I click the Program {}")
+    //Klicka på tillgänglighetsknappen
+    public void iClickTheProgram(String Program) {
+        WebElement textElement = driver.findElement(By.xpath("//*[text()='" + Program + "']"));
+        textElement.click();
+    }
+    @Then("I verify the categories")
+    public void IVerifyTheCategories(){
+    category_list = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.cssSelector("section[aria-label='Kategorier']"));
+    expected_categories = ['Serier', 'Nyheter', 'Dokumentär', 'Sport', 'Barn', 'Filmer', 'Kultur', 'Livsstil', 'Samhälle', 'Vetenskap', 'Öppet arkiv']
+    category_elements = category_list.find_elements(By.CSS_SELECTOR, "h2 span")
+    actual_categories = [element.text for element in category_elements]
+    assert actual_categories == expected_categories
+    }
+    @After
+    public void tearDown() {
+        // Stäng Chrome
+        driver.quit();
+    }
+}
