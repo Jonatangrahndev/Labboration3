@@ -1,0 +1,35 @@
+import com.google.common.base.Verify;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import java.awt.*;
+
+public class Labb3Test {
+    Taskbar.Feature: Svtplay website testing
+
+    Scenario: Verify website title, logotype, and link text
+    Given i am on the Svtplay website
+    When I am on the Svtplay website
+    Then the website title should be "SVT Play"
+    And the logotype should be visible
+    When I click the text named "Tillgänglighet i SVT Play"
+    Then the text should be "Så arbetar SVT med tillgänglighet"
+    Given I am on the Svtplay website
+    When I click on "Program"
+    Then the category list should be displayed
+    And the category list should contain the following categories:
+            | Category     |
+            | Serier       |
+            | Nyheter      |
+            | Dokumentär   |
+            | Sport        |
+            | Barn         |
+            | Filmer       |
+            | Kultur       |
+            | Livsstil     |
+            | Samhälle     |
+            | Vetenskap    |
+            | Öppet arkiv  |
+}
